@@ -42,7 +42,7 @@ class Film
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
-    private ?Realisateur $relation = null;
+    private ?Realisateur $relation = null; // pourquoi appeler cette propriété relation? ça n'a pas de sens, il faut appeler cette propriété realisateur (mais en anglais)
 
    
 
