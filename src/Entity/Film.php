@@ -21,7 +21,7 @@ class Film
         max: 255,
         minMessage: 'Le nom doit être supérieur à 1 caractère',
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
-    )]
+    )]  // Manque un assert pour vérifier que le nom n'est pas vide, non blanc et le Type de données // les variables commences par des minuscules et pas par des majuscules // on écrit en anglais et pas en français
     private ?string $Nom = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -31,17 +31,17 @@ class Film
         minMessage: 'Le code doit être supérieur à 5 caractère',
         maxMessage: 'Le code ne peut pas dépasser 100 caractères',
     )]
-    #[Assert\Unique]
+    #[Assert\Unique] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
     private ?string $Code = null;
 
-    #[ORM\Column]
+    #[ORM\Column] // Manquee un assert pour vérifier le Type de données, manque aussi l'initialisation de la valeur par défaut à false pour la base de données
     private ?bool $Online = false;
 
-    #[ORM\Column]
-    private ?int $SerialNum = null;
+    #[ORM\Column] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    private ?int $SerialNum = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false)] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
     private ?Realisateur $relation = null;
 
    
@@ -68,7 +68,7 @@ class Film
         return $this->Code;
     }
 
-    public function setCode(?string $Code): static
+    public function setCode(?string $Code): static // On retourne pas en static mais en self
     {
         $this->Code = $Code;
 
@@ -92,7 +92,7 @@ class Film
         return $this->SerialNum;
     }
 
-    public function setSerialNum(int $SerialNum): static
+    public function setSerialNum(int $SerialNum): static // On retourne pas en static mais en self
     {
         $this->SerialNum = $SerialNum;
 
@@ -104,7 +104,7 @@ class Film
         return $this->relation;
     }
 
-    public function setRelation(?Realisateur $relation): static
+    public function setRelation(?Realisateur $relation): static // On retourne pas en static mais en self
     {
         $this->relation = $relation;
 

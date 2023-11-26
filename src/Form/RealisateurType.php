@@ -13,8 +13,8 @@ class RealisateurType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Nom')
-            ->add('Pays')
+            ->add('Nom')  // Manque le formType adéquat et le required
+            ->add('Pays')  // Manque le formType adéquat et le required   // pour les pays, faut proposer une liste de pays
             ->add("envoyer",SubmitType::class)
             ->add('acceptedTerms', CheckboxType::class, [
                 'label' => 'J\'accepte les conditions',

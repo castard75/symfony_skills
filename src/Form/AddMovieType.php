@@ -13,11 +13,11 @@ class AddMovieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Nom')
-            ->add('Code')
-            ->add('Online')
-            ->add('SerialNum')
-            ->add('relation')
+            ->add('Nom') // Manque le formType adéquat et le required
+            ->add('Code') // Manque le formType adéquat et le required
+            ->add('Online') // Manque le formType adéquat et le required
+            ->add('SerialNum') // Manque le formType adéquat et le required
+            ->add('relation') // Manque le formType adéquat et le required
             ->add('valider',SubmitType::class);
         ;
     }
