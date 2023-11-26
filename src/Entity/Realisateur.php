@@ -27,7 +27,7 @@ class Realisateur
     #[ORM\Column(length: 255, nullable: true)] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
     private ?string $Pays = null;
 
-    // on se trouve la relation inverse de Film
+    // ou se trouve la relation inverse de Film ?? il faut la créer
 
     public function __toString(): string
     {
