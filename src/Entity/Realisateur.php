@@ -51,7 +51,7 @@ class Realisateur
         return $this->Nom;
     }
 
-    public function setNom(string $Nom): static
+    public function setNom(string $Nom): static // On retourne pas en static mais en self
     {
         $this->Nom = $Nom;
 
@@ -63,7 +63,7 @@ class Realisateur
         return $this->Pays;
     }
 
-    public function setPays(?string $Pays): static
+    public function setPays(?string $Pays): static // On retourne pas en static mais en self
     {
         $this->Pays = $Pays;
 

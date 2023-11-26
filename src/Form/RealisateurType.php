@@ -16,7 +16,7 @@ class RealisateurType extends AbstractType
             ->add('Nom')  // Manque le formType adéquat et le required
             ->add('Pays')  // Manque le formType adéquat et le required   // pour les pays, faut proposer une liste de pays
             ->add("envoyer",SubmitType::class)
-            ->add('acceptedTerms', CheckboxType::class, [
+            ->add('acceptedTerms', CheckboxType::class, [  // j'avais demander de faire une modification avec un select
                 'label' => 'J\'accepte les conditions',
                 'mapped' => false,
                 'required' => true,
