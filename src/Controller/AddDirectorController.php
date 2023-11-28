@@ -16,15 +16,15 @@ class AddDirectorController extends AbstractController
     #[Route('/add/director', name: 'app_add_director')]
     public function index( Request $request,EntityManagerInterface $em): Response
     {
-    // le code n'est pas indenté // le controller ne sert pas à faire des enregistrements en base de données
+                 // le code n'est pas indenté // le controller ne sert pas à faire des enregistrements en base de données
        $realisateur = new Realisateur();
        $form = $this->createForm(RealisateurType::class,$realisateur);
        $form->handleRequest($request);
 
      if($form->isSubmitted() && $form->isValid()){
-// il manque la vérification de la condition  que le realsateur ai accepté les conditions avant de l'enregistrer en base de données
+                // il manque la vérification de la condition  que le realsateur ai accepté les conditions avant de l'enregistrer en base de données
         $em->persist($realisateur);
-        $em->flush(); // pas de variable $realisateur dans un flush et en plus il y a une faute de frappe
+        $em->flush();
         return $this->redirectToRoute('app_home');
 
 

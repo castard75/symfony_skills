@@ -15,7 +15,7 @@ class AddMovieController extends AbstractController
 {
     #[Route('/addMovie', name: 'app_add_movie')]
     public function index(Request $request ,EntityManagerInterface $em ): Response
-    { // le code n'est pas indenté // le controller ne sert pas à faire des enregistrements en base de données
+    {      // le code n'est pas indenté // le controller ne sert pas à faire des enregistrements en base de données
         $films = new Film();
         $form = $this->createForm(AddMovieType::class,$films);
         $form->handleRequest($request);

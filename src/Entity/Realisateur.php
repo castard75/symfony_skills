@@ -22,17 +22,17 @@ class Realisateur
         minMessage: 'Le nom doit être supérieur à 1 caractère',
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
     )]
-    #[Assert\Type('string')]  // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    #[Assert\Type('string')] // il manque l'assert NotNull
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)] 
-    #[Assert\Type('string')] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    #[Assert\Type('string')]
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'director', targetEntity: Film::class)]
-    private Collection $film;
+    private Collection $film; //faudrait refaire la relation, il manque le assert correspondant, les setters, getters, les add et removes
 
-    // ou se trouve la relation inverse de Film ?? il faut la créer
+
 
     public function __toString(): string
     {
@@ -69,7 +69,7 @@ class Realisateur
         return $this->country;
     }
 
-    public function setCountry(?string $country): self // On retourne pas en static mais en self
+    public function setCountry(?string $country): self
     {
         $this->country = $country;
 

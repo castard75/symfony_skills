@@ -19,19 +19,19 @@ class RealisateurType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name',TextType::class,['required' => true])  // Manque le formType adéquat et le required
+            ->add('name',TextType::class,['required' => true])
             ->add('country',ChoiceType::class,['required' => true,'choices' => [
                 'Mexico' => 'Mexico',
                 'Colombia' => 'Colombia',
                 'Brasil' => 'Brasil'
-                // Add more countries as needed
-            ]])  // Manque le formType adéquat et le required   // pour les pays, faut proposer une liste de pays
+
+            ]])  // il existe un formType pour les pays donc il faut l'utiliser, on va pas ecrire à la main tous les pays du monde
             ->add('acceptedTerms', ChoiceType::class,[
                 'mapped' => false,
             'choices'  => [
                 
-                'Yes' => true,
-                'No' => false,
+                'Yes' => true, // il y avait des phrases précises à respecter
+                'No' => false, // il y avait des phrases précises à respecter
             ],
             ])
             ->add("envoyer",SubmitType::class)

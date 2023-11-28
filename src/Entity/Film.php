@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Film
 {
 public function __construct(){
-    $this->online = false;
+    $this->online = false; // ne pas initialiser ici, à retirer
 }
 
     #[ORM\Id]
@@ -27,7 +27,7 @@ public function __construct(){
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
     )] 
     #[Assert\NotBlank] 
-    #[Assert\Type('string')]                        // Manque un assert pour vérifier que le nom n'est pas vide, non blanc et le Type de données // les variables commences par des minuscules et pas par des majuscules // on écrit en anglais et pas en français
+    #[Assert\Type('string')]        // il manque l'assert NotNull
     private ?string $name = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -38,18 +38,18 @@ public function __construct(){
         maxMessage: 'Le code ne peut pas dépasser 100 caractères',
     )]
     #[Assert\Unique]
-    #[Assert\Type('string')]               // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    #[Assert\Type('string')]
     private ?string $code = null;
 
-    #[ORM\Column]
-    #[Assert\Type('bool')] // Manquee un assert pour vérifier le Type de données, manque aussi l'initialisation de la valeur par défaut à false pour la base de données
+    #[ORM\Column] // utiliser options: ['default' => false] pour spécifier la valeur par défaut à la base de données, relancer la migration
+    #[Assert\Type('bool')]
     private ?bool $online = false;
 
     #[ORM\Column] 
-    #[Assert\Type('integer')]
+    #[Assert\Type('integer')] // il manque la contidiion! Obligatoire: Conditionnel (si Est en ligne est True)    https://symfony.com/doc/current/reference/constraints/Expression.html
     private ?int $serialNum = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne] // il manque les assert correspondant
     private ?Realisateur $director = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
 
 
@@ -78,7 +78,7 @@ public function __construct(){
         return $this->code;
     }
 
-    public function setCode(?string $code): self // On retourne pas en static mais en self
+    public function setCode(?string $code): self
     {
         $this->code = $code;
 
@@ -102,7 +102,7 @@ public function __construct(){
         return $this->serialNum;
     }
 
-    public function setSerialNum(int $serialNum): self // On retourne pas en static mais en self
+    public function setSerialNum(int $serialNum): self
     {
         $this->serialNum = $serialNum;
 
@@ -114,7 +114,7 @@ public function __construct(){
         return $this->director;
     }
 
-    public function setDirector(?Realisateur $director): static
+    public function setDirector(?Realisateur $director): static // On retourne pas en static mais en self
     {
         $this->director = $director;
 
