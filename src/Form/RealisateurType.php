@@ -20,7 +20,7 @@ class RealisateurType extends AbstractType
     {
         $builder
             ->add('name',TextType::class,['required' => true])
-            ->add('country',ChoiceType::class,['required' => true,'choices' => [
+            ->add('country',ChoiceType::class,['required' => true,'choices' => [ // required incorrect
                 'Mexico' => 'Mexico',
                 'Colombia' => 'Colombia',
                 'Brasil' => 'Brasil'
