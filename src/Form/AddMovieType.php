@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class AddMovieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -19,7 +20,7 @@ class AddMovieType extends AbstractType
             ->add('code',TextType::class,['required' => true]) // Manque le formType adéquat et le required
             ->add('online',CheckboxType::class,['required' => true]) // Manque le formType adéquat et le required
             ->add('serialNum',NumberType::class,['required' => true]) // Manque le formType adéquat et le required
-            ->add('director',TextType::class,['required' => true]) // Manque le formType adéquat et le required
+            ->add('director') // Manque le formType adéquat et le required
             ->add('valider',SubmitType::class);
         ;
     }

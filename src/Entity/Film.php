@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: FilmRepository::class)]
-#[UniqueEntity(fields: ['Code'], message: 'Le code doit être unique')]
+#[UniqueEntity(fields: ['code'], message: 'Le code doit être unique')]
 class Film
 {
 public function __construct(){
@@ -47,13 +47,11 @@ public function __construct(){
 
     #[ORM\Column] 
     #[Assert\Type('integer')]
-    private ?int $serialNum = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
+    private ?int $serialNum = null;
 
+    #[ORM\ManyToOne]
+    private ?Realisateur $director = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
 
-    #[ORM\ManyToOne(inversedBy: 'film')]
-    #[Assert\Type(Realisateur::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Realisateur $director = null;
 
   
    
@@ -111,18 +109,20 @@ public function __construct(){
         return $this;
     }
 
- 
     public function getDirector(): ?Realisateur
     {
         return $this->director;
     }
 
-    public function setDirector(?Realisateur $director): self
+    public function setDirector(?Realisateur $director): static
     {
         $this->director = $director;
 
         return $this;
     }
+
+ 
+ 
 
 
 
