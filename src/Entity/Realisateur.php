@@ -21,11 +21,16 @@ class Realisateur
         max: 255,
         minMessage: 'Le nom doit être supérieur à 1 caractère',
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
-    )] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
-    private ?string $Nom = null;
+    )]
+    #[Assert\Type('string')]  // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
-    private ?string $Pays = null;
+    #[ORM\Column(length: 255, nullable: true)] 
+    #[Assert\Type('string')] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    private ?string $country = null;
+
+    #[ORM\OneToMany(mappedBy: 'director', targetEntity: Film::class)]
+    private Collection $film;
 
     // ou se trouve la relation inverse de Film ?? il faut la créer
 
@@ -33,12 +38,13 @@ class Realisateur
     {
         return sprintf(
             '%s',
-            $this->Nom,
+            $this->name,
         );
     }
     public function __construct()
     {
         $this->films = new ArrayCollection();
+      
     }
 
     public function getId(): ?int
@@ -46,26 +52,26 @@ class Realisateur
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->Nom;
+        return $this->name;
     }
 
-    public function setNom(string $Nom): static // On retourne pas en static mais en self
+    public function setName(string $name): self // On retourne pas en static mais en self
     {
-        $this->Nom = $Nom;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getPays(): ?string
+    public function getCountry(): ?string
     {
-        return $this->Pays;
+        return $this->country;
     }
 
-    public function setPays(?string $Pays): static // On retourne pas en static mais en self
+    public function setCountry(?string $country): self // On retourne pas en static mais en self
     {
-        $this->Pays = $Pays;
+        $this->country = $country;
 
         return $this;
     }

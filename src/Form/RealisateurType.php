@@ -8,19 +8,33 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+
 class RealisateurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Nom')  // Manque le formType adéquat et le required
-            ->add('Pays')  // Manque le formType adéquat et le required   // pour les pays, faut proposer une liste de pays
-            ->add("envoyer",SubmitType::class)
-            ->add('acceptedTerms', CheckboxType::class, [  // j'avais demander de faire une modification avec un select
-                'label' => 'J\'accepte les conditions',
+            ->add('name',TextType::class,['required' => true])  // Manque le formType adéquat et le required
+            ->add('country',ChoiceType::class,['required' => true,'choices' => [
+                'Mexico' => 'Mexico',
+                'Colombia' => 'Colombia',
+                'Brasil' => 'Brasil'
+                // Add more countries as needed
+            ]])  // Manque le formType adéquat et le required   // pour les pays, faut proposer une liste de pays
+            ->add('acceptedTerms', ChoiceType::class,[
                 'mapped' => false,
-                'required' => true,
+            'choices'  => [
+                
+                'Yes' => true,
+                'No' => false,
+            ],
             ])
+            ->add("envoyer",SubmitType::class)
         ;
     }
 

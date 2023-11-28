@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use App\Entity\Realisateur;
 use App\Repository\FilmRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -10,6 +10,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(fields: ['Code'], message: 'Le code doit être unique')]
 class Film
 {
+public function __construct(){
+    $this->online = false;
+}
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -21,8 +25,10 @@ class Film
         max: 255,
         minMessage: 'Le nom doit être supérieur à 1 caractère',
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
-    )]  // Manque un assert pour vérifier que le nom n'est pas vide, non blanc et le Type de données // les variables commences par des minuscules et pas par des majuscules // on écrit en anglais et pas en français
-    private ?string $Nom = null;
+    )] 
+    #[Assert\NotBlank] 
+    #[Assert\Type('string')]                        // Manque un assert pour vérifier que le nom n'est pas vide, non blanc et le Type de données // les variables commences par des minuscules et pas par des majuscules // on écrit en anglais et pas en français
+    private ?string $name = null;
 
     #[ORM\Column(length: 100, nullable: true)]
     #[Assert\Length(
@@ -31,19 +37,25 @@ class Film
         minMessage: 'Le code doit être supérieur à 5 caractère',
         maxMessage: 'Le code ne peut pas dépasser 100 caractères',
     )]
-    #[Assert\Unique] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
-    private ?string $Code = null;
+    #[Assert\Unique]
+    #[Assert\Type('string')]               // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    private ?string $code = null;
 
-    #[ORM\Column] // Manquee un assert pour vérifier le Type de données, manque aussi l'initialisation de la valeur par défaut à false pour la base de données
-    private ?bool $Online = false;
+    #[ORM\Column]
+    #[Assert\Type('bool')] // Manquee un assert pour vérifier le Type de données, manque aussi l'initialisation de la valeur par défaut à false pour la base de données
+    private ?bool $online = false;
 
-    #[ORM\Column] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
-    private ?int $SerialNum = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
+    #[ORM\Column] 
+    #[Assert\Type('integer')]
+    private ?int $serialNum = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)] // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
-    private ?Realisateur $relation = null; // pourquoi appeler cette propriété relation? ça n'a pas de sens, il faut appeler cette propriété realisateur (mais en anglais)
 
+    #[ORM\ManyToOne(inversedBy: 'film')]
+    #[Assert\Type(Realisateur::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Realisateur $director = null;
+
+  
    
 
     public function getId(): ?int
@@ -51,65 +63,68 @@ class Film
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->Nom;
+        return $this->name;
     }
 
-    public function setNom(string $Nom): static
+    public function setName(string $name): self
     {
-        $this->Nom = $Nom;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getCode(): ?string
     {
-        return $this->Code;
+        return $this->code;
     }
 
-    public function setCode(?string $Code): static // On retourne pas en static mais en self
+    public function setCode(?string $code): self // On retourne pas en static mais en self
     {
-        $this->Code = $Code;
+        $this->code = $code;
 
         return $this;
     }
 
     public function isOnline(): ?bool
     {
-        return $this->Online;
+        return $this->online;
     }
 
-    public function setOnline(bool $Online): static
+    public function setOnline(bool $online): self
     {
-        $this->Online = $Online;
+        $this->online = $online;
 
         return $this;
     }
 
     public function getSerialNum(): ?int
     {
-        return $this->SerialNum;
+        return $this->serialNum;
     }
 
-    public function setSerialNum(int $SerialNum): static // On retourne pas en static mais en self
+    public function setSerialNum(int $serialNum): self // On retourne pas en static mais en self
     {
-        $this->SerialNum = $SerialNum;
+        $this->serialNum = $serialNum;
 
         return $this;
     }
 
-    public function getRelation(): ?Realisateur
+ 
+    public function getDirector(): ?Realisateur
     {
-        return $this->relation;
+        return $this->director;
     }
 
-    public function setRelation(?Realisateur $relation): static // On retourne pas en static mais en self
+    public function setDirector(?Realisateur $director): self
     {
-        $this->relation = $relation;
+        $this->director = $director;
 
         return $this;
     }
+
+
 
 
 }

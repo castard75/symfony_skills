@@ -16,42 +16,33 @@ class AddMovieController extends AbstractController
     #[Route('/addMovie', name: 'app_add_movie')]
     public function index(Request $request ,EntityManagerInterface $em ): Response
     { // le code n'est pas indenté // le controller ne sert pas à faire des enregistrements en base de données
-$films = new Film();
+        $films = new Film();
+        $form = $this->createForm(AddMovieType::class,$films);
+        $form->handleRequest($request);
 
-$form = $this->createForm(AddMovieType::class,$films);
+      if ($form->isSubmitted() && $form->isValid()) {
 
-
-
-$form->handleRequest($request);
-
-if ($form->isSubmitted() && $form->isValid()) {
-   
-
-  
-     
-    $em->persist($films);
-    $em->flush();
+         $em->persist($films);
+         $em->flush();
        
         return $this->redirectToRoute('app_success');
-  
 
-} else {
-   
-        return $this->render('add_movie/index.html.twig', [
+      }else{
+          
+          return $this->render('add_movie/index.html.twig', [
             'controller_name' => 'AddMovieController',
             'form'=> $form->createView()
-        ]);
+          ]);
+         }
     }
-}
 
 
-#[Route('/success', name: 'app_success')]
-public function succes() : Response{
+    #[Route('/success', name: 'app_success')]
+    public function succes() : Response{
 
+          return $this->render('add_movie/sucess.html.twig',[
+            'controller_name' => 'Succes'
+          ]);
+    }
 
-return $this->render('add_movie/sucess.html.twig',[
-    'controller_name' => 'Succes'
-]);
-
-}
 }
