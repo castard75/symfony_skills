@@ -10,8 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bridge\Doctrine\Form\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Intl\Countries;
 
 
 class RealisateurType extends AbstractType
@@ -20,18 +21,16 @@ class RealisateurType extends AbstractType
     {
         $builder
             ->add('name',TextType::class,['required' => true])
-            ->add('country',ChoiceType::class,['required' => true,'choices' => [ // required incorrect
-                'Mexico' => 'Mexico',
-                'Colombia' => 'Colombia',
-                'Brasil' => 'Brasil'
-
-            ]])  // il existe un formType pour les pays donc il faut l'utiliser, on va pas ecrire à la main tous les pays du monde
+            ->add('country', CountryType::class, array( 'label' => 'Pays',
+            'preferred_choices' => array('FR'),
+            'choice_translation_locale' => null
+            ))  
             ->add('acceptedTerms', ChoiceType::class,[
                 'mapped' => false,
             'choices'  => [
                 
-                'Yes' => true, // il y avait des phrases précises à respecter
-                'No' => false, // il y avait des phrases précises à respecter
+                "J'accepte les conditions d'utilisation du site." => true, 
+                "Non je n'accepte pas les conditions d'utilisation du site " => false, 
             ],
             ])
             ->add("envoyer",SubmitType::class)

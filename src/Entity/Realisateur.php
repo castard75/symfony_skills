@@ -22,7 +22,8 @@ class Realisateur
         minMessage: 'Le nom doit être supérieur à 1 caractère',
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
     )]
-    #[Assert\Type('string')] // il manque l'assert NotNull
+    #[Assert\NotNull]
+    #[Assert\Type('string')] 
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)] 
@@ -30,8 +31,14 @@ class Realisateur
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'director', targetEntity: Film::class)]
-    private Collection $film; //faudrait refaire la relation, il manque le assert correspondant, les setters, getters, les add et removes
+    private Collection $film;
 
+    public function __construct()
+    {
+        $this->film = new ArrayCollection();
+    }
+
+    
 
 
     public function __toString(): string
@@ -41,11 +48,7 @@ class Realisateur
             $this->name,
         );
     }
-    public function __construct()
-    {
-        $this->films = new ArrayCollection();
-      
-    }
+  
 
     public function getId(): ?int
     {
@@ -57,7 +60,7 @@ class Realisateur
         return $this->name;
     }
 
-    public function setName(string $name): self // On retourne pas en static mais en self
+    public function setName(string $name): self 
     {
         $this->name = $name;
 
@@ -72,6 +75,36 @@ class Realisateur
     public function setCountry(?string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Film>
+     */
+    public function getFilm(): Collection
+    {
+        return $this->film;
+    }
+
+    public function addFilm(Film $film): static
+    {
+        if (!$this->film->contains($film)) {
+            $this->film->add($film);
+            $film->setDirector($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFilm(Film $film): static
+    {
+        if ($this->film->removeElement($film)) {
+            
+            if ($film->getDirector() === $this) {
+                $film->setDirector(null);
+            }
+        }
 
         return $this;
     }

@@ -3,13 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Film;
+use App\Entity\Realisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class AddMovieType extends AbstractType
 {
@@ -17,10 +18,18 @@ class AddMovieType extends AbstractType
     {
         $builder
             ->add('name',TextType::class,['required' => true])
-            ->add('code',TextType::class,['required' => true]) // required incorrect
-            ->add('online',CheckboxType::class,['required' => true]) // On est sur un booléen, il faut utiliser le formType adéquat
-            ->add('serialNum',NumberType::class,['required' => true]) // required incorrect
-            ->add('director') // Manque le formType adéquat et le required
+            ->add('code',TextType::class,['required' => false]) 
+            ->add('online',ChoiceType::class,['required' => true,'choices' => [
+                'En ligne' => true,
+                'Hors ligne' => false,
+            ]]) 
+            ->add('serialNum',NumberType::class,['required' => false]) 
+            ->add('director', EntityType::class, [
+                'required'=>true,
+                'class' => Realisateur::class,
+                'choice_label' => 'name',
+                'attr' => ['hidden' => false]
+            ])  
             ->add('valider',SubmitType::class);
         ;
     }

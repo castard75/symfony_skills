@@ -6,13 +6,11 @@ use App\Repository\FilmRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+
 #[ORM\Entity(repositoryClass: FilmRepository::class)]
 #[UniqueEntity(fields: ['code'], message: 'Le code doit être unique')]
 class Film
 {
-public function __construct(){
-    $this->online = false; // ne pas initialiser ici, à retirer
-}
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,7 +25,8 @@ public function __construct(){
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
     )] 
     #[Assert\NotBlank] 
-    #[Assert\Type('string')]        // il manque l'assert NotNull
+    #[Assert\Type('string')]  
+    #[Assert\NotNull]      
     private ?string $name = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -41,16 +40,27 @@ public function __construct(){
     #[Assert\Type('string')]
     private ?string $code = null;
 
-    #[ORM\Column] // utiliser options: ['default' => false] pour spécifier la valeur par défaut à la base de données, relancer la migration
+    #[ORM\Column (options: ['default' => false])]
     #[Assert\Type('bool')]
     private ?bool $online = false;
 
-    #[ORM\Column] 
-    #[Assert\Type('integer')] // il manque la contidiion! Obligatoire: Conditionnel (si Est en ligne est True)    https://symfony.com/doc/current/reference/constraints/Expression.html
+    #[ORM\Column( nullable: true)] 
+    #[Assert\Type('integer')] 
+    #[Assert\Expression(
+        "this.isOnline() == true ? (value != null) : true",
+        message: 'Le sérial est obligatoire'
+    )]
     private ?int $serialNum = null;
 
-    #[ORM\ManyToOne] // il manque les assert correspondant
-    private ?Realisateur $director = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
+    #[ORM\ManyToOne(inversedBy: 'film')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Expression(
+        "this.isOnline() == true ? (value != null) : true",
+        message: 'obligatoire'
+    )]
+    #[Assert\Type(Realisateur::class)]
+    
+    private ?Realisateur $director = null; 
 
 
   
@@ -114,12 +124,14 @@ public function __construct(){
         return $this->director;
     }
 
-    public function setDirector(?Realisateur $director): static // On retourne pas en static mais en self
+    public function setDirector(?Realisateur $director): static
     {
         $this->director = $director;
 
         return $this;
     }
+
+ 
 
  
  
