@@ -5,6 +5,7 @@ use App\Entity\Realisateur;
 use App\Repository\FilmRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: FilmRepository::class)]
@@ -36,7 +37,6 @@ class Film
         minMessage: 'Le code doit être supérieur à 5 caractère',
         maxMessage: 'Le code ne peut pas dépasser 100 caractères',
     )]
-    #[Assert\Unique]
     #[Assert\Type('string')]
     private ?string $code = null;
 
@@ -47,19 +47,14 @@ class Film
     #[ORM\Column( nullable: true)] 
     #[Assert\Type('integer')] 
     #[Assert\Expression(
-        "this.isOnline() == true ? (value != null) : true",
-        message: 'Le sérial est obligatoire'
+        "(this.isOnline() == true and this.getSerialNum() != null) or (this.isOnline() == false)",
+        message: 'Le sérial est obligatoire si le film est en ligne'
     )]
     private ?int $serialNum = null;
 
     #[ORM\ManyToOne(inversedBy: 'film')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\Expression(
-        "this.isOnline() == true ? (value != null) : true",
-        message: 'obligatoire'
-    )]
     #[Assert\Type(Realisateur::class)]
-    
     private ?Realisateur $director = null; 
 
 
@@ -124,7 +119,7 @@ class Film
         return $this->director;
     }
 
-    public function setDirector(?Realisateur $director): static
+    public function setDirector(?Realisateur $director): self
     {
         $this->director = $director;
 

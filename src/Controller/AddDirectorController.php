@@ -14,26 +14,30 @@ use App\Entity\Realisateur;
 class AddDirectorController extends AbstractController
 {
     #[Route('/add/director', name: 'app_add_director')]
-    public function index( Request $request,EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-                
-       $realisateur = new Realisateur();
-       $form = $this->createForm(RealisateurType::class,$realisateur);
-       $form->handleRequest($request);
 
-     if($form->isSubmitted() && $form->isValid()){
-      $acceptedTerms = $request->request->get('acceptedTerms');
-          dd($acceptedTerms);   
+        $realisateur = new Realisateur();
+        $form = $this->createForm(RealisateurType::class, $realisateur);
+        $form->handleRequest($request);
 
-        $em->persist($realisateur);
-        // $em->flush();
-        return $this->redirectToRoute('app_home');
+        if ($form->isSubmitted() && $form->isValid()) {
 
+            if ($form->get('acceptedTerms')->getData()) {
+                $em->persist($realisateur);
+                $em->flush();
+                $this->addFlash('success', 'Realisateur ajouté avec succès');
+                return $this->redirectToRoute('app_home');
+            } else {
+                $this->addFlash('error', 'Vous devez accepter les conditions');
+            }
 
+        }
 
-     } else {
-    
-         return $this->render('add_director/index.html.twig', [
-         'controller_name' => 'AddDirectorController',
-         'form'=> $form]);
-     }}}
+            return $this->render('add_director/index.html.twig', [
+                'controller_name' => 'AddDirectorController',
+                'form' => $form]);
+
+    }
+
+}

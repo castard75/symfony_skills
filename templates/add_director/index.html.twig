@@ -1,2 +1,18 @@
-{% extends 'base.html.twig' %} {% block title %}Hello AddDirectorController!{%
-endblock %} {% block body %} {{ form(form) }}{% endblock %}
+{% extends 'base.html.twig' %}
+
+    {% block title %}Hello AddDirectorController!{%endblock %}
+
+
+{% block body %}
+    {% for message in app.flashes('error') %}
+        <div class="notification-error" style="background: #B0413E;color: white;">
+            <p><span>{{ message }}</span></p>
+        </div>
+    {% endfor %}
+
+
+    {{ form(form) }}
+
+
+
+{% endblock %}
