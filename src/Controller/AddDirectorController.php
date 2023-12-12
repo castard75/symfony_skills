@@ -14,24 +14,30 @@ use App\Entity\Realisateur;
 class AddDirectorController extends AbstractController
 {
     #[Route('/add/director', name: 'app_add_director')]
-    public function index( Request $request,EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
-    // le code n'est pas indenté // le controller ne sert pas à faire des enregistrements en base de données
-       $realisateur = new Realisateur();
-       $form = $this->createForm(RealisateurType::class,$realisateur);
-       $form->handleRequest($request);
 
-     if($form->isSubmitted() && $form->isValid()){
-// il manque la vérification de la condition  que le realsateur ai accepté les conditions avant de l'enregistrer en base de données
-        $em->persist($realisateur);
-        $em->flush(); // pas de variable $realisateur dans un flush et en plus il y a une faute de frappe
-        return $this->redirectToRoute('app_home');
+        $realisateur = new Realisateur();
+        $form = $this->createForm(RealisateurType::class, $realisateur);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
 
+            if ($form->get('acceptedTerms')->getData()) {
+                $em->persist($realisateur);
+                $em->flush();
+                $this->addFlash('success', 'Realisateur ajouté avec succès');
+                return $this->redirectToRoute('app_home');
+            } else {
+                $this->addFlash('error', 'Vous devez accepter les conditions');
+            }
 
-     } else {
-    
-         return $this->render('add_director/index.html.twig', [
-         'controller_name' => 'AddDirectorController',
-         'form'=> $form]);
-     }}}
+        }
+
+            return $this->render('add_director/index.html.twig', [
+                'controller_name' => 'AddDirectorController',
+                'form' => $form]);
+
+    }
+
+}

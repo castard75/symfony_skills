@@ -5,14 +5,13 @@ use App\Entity\Realisateur;
 use App\Repository\FilmRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: FilmRepository::class)]
 #[UniqueEntity(fields: ['code'], message: 'Le code doit être unique')]
 class Film
 {
-public function __construct(){
-    $this->online = false;
-}
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,7 +26,8 @@ public function __construct(){
         maxMessage: 'Le nom ne peut pas dépasser 255 caractères',
     )] 
     #[Assert\NotBlank] 
-    #[Assert\Type('string')]                        // Manque un assert pour vérifier que le nom n'est pas vide, non blanc et le Type de données // les variables commences par des minuscules et pas par des majuscules // on écrit en anglais et pas en français
+    #[Assert\Type('string')]  
+    #[Assert\NotNull]      
     private ?string $name = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -37,20 +37,25 @@ public function __construct(){
         minMessage: 'Le code doit être supérieur à 5 caractère',
         maxMessage: 'Le code ne peut pas dépasser 100 caractères',
     )]
-    #[Assert\Unique]
-    #[Assert\Type('string')]               // Manque un assert pour vérifier le Type de données // les variables commences par des minuscules et pas par des majuscules  // on écrit en anglais et pas en français
+    #[Assert\Type('string')]
     private ?string $code = null;
 
-    #[ORM\Column]
-    #[Assert\Type('bool')] // Manquee un assert pour vérifier le Type de données, manque aussi l'initialisation de la valeur par défaut à false pour la base de données
+    #[ORM\Column (options: ['default' => false])]
+    #[Assert\Type('bool')]
     private ?bool $online = false;
 
-    #[ORM\Column] 
-    #[Assert\Type('integer')]
+    #[ORM\Column( nullable: true)] 
+    #[Assert\Type('integer')] 
+    #[Assert\Expression(
+        "(this.isOnline() == true and this.getSerialNum() != null) or (this.isOnline() == false)",
+        message: 'Le sérial est obligatoire si le film est en ligne'
+    )]
     private ?int $serialNum = null;
 
-    #[ORM\ManyToOne]
-    private ?Realisateur $director = null; // il manque la condition! Obligatoire: Conditionnel (si Est en ligne est True)
+    #[ORM\ManyToOne(inversedBy: 'film')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Type(Realisateur::class)]
+    private ?Realisateur $director = null; 
 
 
   
@@ -78,7 +83,7 @@ public function __construct(){
         return $this->code;
     }
 
-    public function setCode(?string $code): self // On retourne pas en static mais en self
+    public function setCode(?string $code): self
     {
         $this->code = $code;
 
@@ -102,7 +107,7 @@ public function __construct(){
         return $this->serialNum;
     }
 
-    public function setSerialNum(int $serialNum): self // On retourne pas en static mais en self
+    public function setSerialNum(int $serialNum): self
     {
         $this->serialNum = $serialNum;
 
@@ -114,12 +119,14 @@ public function __construct(){
         return $this->director;
     }
 
-    public function setDirector(?Realisateur $director): static
+    public function setDirector(?Realisateur $director): self
     {
         $this->director = $director;
 
         return $this;
     }
+
+ 
 
  
  

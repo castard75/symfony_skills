@@ -10,8 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bridge\Doctrine\Form\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Intl\Countries;
 
 
 class RealisateurType extends AbstractType
@@ -19,19 +20,17 @@ class RealisateurType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name',TextType::class,['required' => true])  // Manque le formType adéquat et le required
-            ->add('country',ChoiceType::class,['required' => true,'choices' => [
-                'Mexico' => 'Mexico',
-                'Colombia' => 'Colombia',
-                'Brasil' => 'Brasil'
-                // Add more countries as needed
-            ]])  // Manque le formType adéquat et le required   // pour les pays, faut proposer une liste de pays
+            ->add('name',TextType::class,['required' => true])
+            ->add('country', CountryType::class, array( 'label' => 'Pays',
+            'preferred_choices' => array('FR'),
+            'choice_translation_locale' => null
+            ))  
             ->add('acceptedTerms', ChoiceType::class,[
                 'mapped' => false,
             'choices'  => [
                 
-                'Yes' => true,
-                'No' => false,
+                "J'accepte les conditions d'utilisation du site." => true, 
+                "Non je n'accepte pas les conditions d'utilisation du site " => false, 
             ],
             ])
             ->add("envoyer",SubmitType::class)
