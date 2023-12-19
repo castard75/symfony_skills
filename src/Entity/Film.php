@@ -55,7 +55,12 @@ class Film
     #[ORM\ManyToOne(inversedBy: 'film')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Type(Realisateur::class)]
-    private ?Realisateur $director = null; 
+    private ?Realisateur $director = null;
+    
+    #[Assert\NotNull] 
+    #[ORM\ManyToOne(inversedBy: 'films')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Genre $genre = null; 
 
 
   
@@ -122,6 +127,18 @@ class Film
     public function setDirector(?Realisateur $director): self
     {
         $this->director = $director;
+
+        return $this;
+    }
+
+    public function getGenre(): ?Genre
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(?Genre $genre): static
+    {
+        $this->genre = $genre;
 
         return $this;
     }
