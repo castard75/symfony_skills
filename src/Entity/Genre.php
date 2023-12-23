@@ -45,13 +45,13 @@ class Genre
 
       
 
-    public function __toString(): string
-    {
-        return sprintf(
-            '%s',
-            $this->nom,
-        );
-    }
+    // public function __toString(): string
+    // {
+    //     return sprintf(
+    //         '%s',
+    //         $this->nom,
+    //     );
+    // }
 
     public function getId(): ?int
     {

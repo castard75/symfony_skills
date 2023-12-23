@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Film;
 use App\Entity\Realisateur;
+use App\Entity\Genre;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,7 +24,13 @@ class AddMovieType extends AbstractType
                 'En ligne' => true,
                 'Hors ligne' => false,
             ]]) 
-            ->add('serialNum',NumberType::class,['required' => false]) 
+            ->add('serialNum',NumberType::class,['required' => false])
+            ->add('genre', EntityType::class, [
+                'required'=>true,
+                'class' => Genre::class,
+                'choice_label' => 'nom',
+                'attr' => ['hidden' => false]
+            ])   
             ->add('director', EntityType::class, [
                 'required'=>true,
                 'class' => Realisateur::class,
