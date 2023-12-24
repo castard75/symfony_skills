@@ -16,7 +16,7 @@ use App\Form\FilmDTOType;
 
 class AddGenreController extends AbstractController
 {
-    #[Route('/add/genre', name: 'app_add_genre')]
+    #[Route('/addGenre', name: 'app_add_genre')]
     public function index(Request $request,EntityManagerInterface $em): Response
     {
    
